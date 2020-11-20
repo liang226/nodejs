@@ -1,0 +1,44 @@
+{{extend './_layouts/home.html'}}
+
+{{block 'title'}}{{'多人博客 - 首页'}}{{/block}}
+
+{{block 'body'}}
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    <h2 class="sub-header">用户信息</h2>
+    <button class="btn btn-success" disabled>添加用户</button>
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>id</th>
+            <th>邮箱</th>
+            <th>名称</th>
+            <th>性别</th>
+            <th>签名</th>
+            <th>状态</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{each users}}
+          <td>{{ $index + 1 }}</td>
+          <td>{{ $value.email }}</td>
+          <td>{{ $value.nickname }}</td>
+          <td>{{ $value.gender == '-1' ? '保密' : $value.gender == '0' ? '男': '女'}}</td>
+          <td>{{ $value.bio }}</td>
+          <td>{{ $value.status == '0' ? '正常': '禁止登陆'}}</td>
+          <td>
+            <a href="/user/edit?id={{ $value.id }}">编辑</a>
+            <a href="/user/delete?id={{ $value.id }}">删除</a>
+          </td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+</div>
+
+<script src="/node_modules/jquery/dist/jquery.js"></script>
+
+
+{{/block}}

@@ -1,0 +1,64 @@
+{{extend '../_layouts/home.html'}}
+
+{{block 'title'}}{{'多人博客 - 首页'}}{{/block}}
+
+{{block 'body'}}
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    <h2 class="sub-header">修改信息</h2>
+        <form id="login_form">
+            <input type="hidden" name="id" value="{{ users&&users.id }}">
+            <div class="form-group">
+              <label for="exampleInputEmail1">邮箱</label>
+              <input type="text" class="form-control" id="exampleInputEmail1" name="email" value="{{ users&&users.email }}" disabled>
+            </div>
+            <div class="form-group">
+                <label for="exampleInputPassword1">名称</label>
+                <input type="text" class="form-control"  value="{{ users&&users.nickname }}" name="nickname" id="exampleInputPassword1" placeholder="">
+              </div>
+            <div class="checked">
+                <div><label for="">性别</label></div>
+                <input type="radio" name="gender" value="0"> <label for="">男</label>  
+                    <input type="radio" name="gender" value="1"> <label for="">女</label>
+                    <input type="radio" name="gender" value="-1"> <label for="">保密</label>
+            </div>
+            <div class="form-group">
+              <div><label for="exampleInputFile">签名</label></div>
+              <input type="text" name="bio" id="exampleInputFile" value="{{ users&&users.bio }}" class="form-control">
+            </div>
+            <div class="form-group">
+                <div><label for="exampleInputFile">状态</label></div>
+                <input type="radio" name="status" value="0"> <label for="">正常</label>  
+                <input type="radio" name="status" value="1"> <label for="">不可评论</label>
+                <input type="radio" name="status" value="2"> <label for="">不可登录</label>
+              </div>
+            
+            <button type="submit" class="btn btn-success">提交</button>
+          </form>
+</div>
+
+<script src="/node_modules/jquery/dist/jquery.js"></script>
+<script>
+    $('#login_form').on('submit', function (e) {
+      e.preventDefault()
+      var formData = $(this).serialize()
+      console.log(formData)
+      $.ajax({
+        url: '/user/edit',
+        type: 'post',
+        data: formData,
+        dataType: 'json',
+        success: function (data) {
+          var err_code = data.err_code
+          if (err_code === 0) {
+            window.location.href = '/user'
+          } else if (err_code === 1) {
+            window.alert(data.message)
+          } else if (err_code === 500) {
+            window.alert(data.message)
+          }
+        }
+      })
+    })
+</script>
+
+{{/block}}
